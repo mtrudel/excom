@@ -1,4 +1,4 @@
-defmodule Excom.MixProject do
+defmodule EXCOM.MixProject do
   use Mix.Project
 
   def project do
