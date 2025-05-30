@@ -1,21 +1,9 @@
-# Excom
+![EXCOM](https://github.com/mtrudel/excom/raw/main/assets/readme_logo.svg)
 
-**TODO: Add description**
+[![Build Status](https://github.com/mtrudel/excom/workflows/Elixir%20CI/badge.svg)](https://github.com/mtrudel/excom/actions)
+[![Docs](https://img.shields.io/badge/api-docs-green.svg?style=flat)](https://hexdocs.pm/excom)
+[![Hex.pm](https://img.shields.io/hexpm/v/excom.svg?style=flat&color=blue)](https://hex.pm/packages/excom)
 
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `excom` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:excom, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/excom>.
-
+[EXCOM](https://tron.fandom.com/wiki/ENCOM) is an MCP server for Elixir. It
+supports HTTP streaming and stdio interfaces, and currently supports exposing
+tools.
