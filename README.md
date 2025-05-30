@@ -4,6 +4,6 @@
 [![Docs](https://img.shields.io/badge/api-docs-green.svg?style=flat)](https://hexdocs.pm/excom)
 [![Hex.pm](https://img.shields.io/hexpm/v/excom.svg?style=flat&color=blue)](https://hex.pm/packages/excom)
 
-[EXCOM](https://tron.fandom.com/wiki/ENCOM) is an MCP server for Elixir. It
-supports HTTP streaming and stdio interfaces, and currently supports exposing
-tools.
+[EXCOM](https://tron.fandom.com/wiki/ENCOM) is an MCP server for Elixir. It has planned support for exposing tools via HTTP streaming.
+
+**Extremely** WiP for the next while.

@@ -1,3 +1,3 @@
-defmodule ExcomTest do
+defmodule EXCOMTest do
   use ExUnit.Case
 end
