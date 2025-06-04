@@ -22,11 +22,18 @@ defmodule EXCOM.MixProject do
   end
 
   def application do
-    [extra_applications: [:logger]]
+    [
+      extra_applications: [:logger],
+      mod: {EXCOM.Application, []}
+    ]
   end
 
   defp deps do
     [
+      {:plug, "~> 1.18"},
+      {:bandit, ">= 0.0.0", only: [:dev, :test]},
+      {:req, ">= 0.0.0", only: [:dev, :test]},
+      {:machete, ">= 0.0.0", only: :test},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:credo, ">= 0.0.0", only: [:dev, :test], runtime: false},
       {:dialyxir, ">= 0.0.0", only: [:dev, :test], runtime: false}
