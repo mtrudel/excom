@@ -31,6 +31,12 @@ defmodule EXCOM.Server do
     {[], %{session | state: :initialized}}
   end
 
+  # Ping
+
+  def handle_message(%Request{method: "ping"} = message, %EXCOM.Session{} = session) do
+    {%Response{id: message.id}, session}
+  end
+
   def handle_message(%Response{}, %EXCOM.Session{} = session), do: {[], session}
   def handle_message(%Notification{}, %EXCOM.Session{} = session), do: {[], session}
 end

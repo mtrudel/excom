@@ -50,6 +50,18 @@ defmodule EXCOM.PlugTest do
     end
   end
 
+  describe "ping support" do
+    test "echoes back pings", context do
+      resp = Req.post!(context.url, json: build_initialize())
+      [session_id] = resp.headers["mcp-session-id"]
+
+      ping_request = build_request(123, "ping", %{})
+      resp = Req.post!(context.url, json: ping_request, headers: %{"Mcp-Session-Id": session_id})
+      assert resp.status == 200
+      assert resp.body ~> valid_response(123, %{})
+    end
+  end
+
   defp build_initialize do
     build_request(
       1,
