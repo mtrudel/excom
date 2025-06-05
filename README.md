@@ -7,3 +7,11 @@
 [EXCOM](https://tron.fandom.com/wiki/ENCOM) is an MCP server for Elixir. It has planned support for exposing tools via HTTP streaming.
 
 **Extremely** WiP for the next while.
+
+## Usage
+
+WiP
+
+## Development
+
+The [MCP Inspector](https://github.com/modelcontextprotocol/inspector) is invaluable during development; run it via `npx @modelcontextprotocol/inspector`.
