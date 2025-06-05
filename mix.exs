@@ -31,6 +31,7 @@ defmodule EXCOM.MixProject do
   defp deps do
     [
       {:plug, "~> 1.18"},
+      {:jason, "~> 1.4"},
       {:bandit, ">= 0.0.0", only: [:dev, :test]},
       {:req, ">= 0.0.0", only: [:dev, :test]},
       {:machete, ">= 0.0.0", only: :test},

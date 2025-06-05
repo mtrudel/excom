@@ -5,7 +5,13 @@ defmodule EXCOM.Plug do
 
   use Plug.Router
 
-  plug(Plug.Parsers, parsers: [:json], pass: [], json_decoder: Jason, nest_all_json: true)
+  plug(Plug.Parsers,
+    parsers: [:json],
+    pass: [],
+    json_decoder: EXCOM.MessageParser,
+    nest_all_json: true
+  )
+
   plug(:find_or_create_session)
   plug(:match)
   plug(:dispatch)

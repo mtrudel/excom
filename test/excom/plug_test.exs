@@ -21,13 +21,13 @@ defmodule EXCOM.PlugTest do
       resp = Req.post!(context.url)
       [session_id] = resp.headers["mcp-session-id"]
 
-      resp = Req.post!(context.url, headers: %{"Mcp-Session-Id": session_id})
-      assert resp.status == 200
+      resp = Req.post!(context.url, json: [], headers: %{"Mcp-Session-Id": session_id})
+      assert resp.status == 202
       assert resp.headers["mcp-session-id"] == [session_id]
     end
 
     test "can delete an existing session", context do
-      resp = Req.post!(context.url)
+      resp = Req.post!(context.url, json: [])
       [session_id] = resp.headers["mcp-session-id"]
 
       resp = Req.delete!(context.url, headers: %{"Mcp-Session-Id": session_id})
