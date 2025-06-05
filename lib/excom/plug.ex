@@ -34,9 +34,36 @@ defmodule EXCOM.Plug do
   end
 
   post _ do
-    conn
-    |> put_resp_header("mcp-session-id", conn.private[:excom_session].id)
-    |> send_resp(200, [])
+    {messages, session} =
+      conn.body_params["_json"]
+      |> Enum.reduce({[], conn.private[:excom_session]}, fn message, {messages, session} ->
+        {new_messages, session} = EXCOM.Server.handle_message(message, session)
+        {[new_messages | messages], session}
+      end)
+
+    :ok = EXCOM.SessionStore.put(session)
+
+    messages
+    |> Enum.reverse()
+    |> List.flatten()
+    |> case do
+      [] ->
+        conn
+        |> put_resp_header("mcp-session-id", conn.private[:excom_session].id)
+        |> send_resp(202, "")
+
+      [message] ->
+        conn
+        |> put_resp_content_type("application/json")
+        |> put_resp_header("mcp-session-id", conn.private[:excom_session].id)
+        |> send_resp(200, Jason.encode!(message))
+
+      messages ->
+        conn
+        |> put_resp_content_type("application/json")
+        |> put_resp_header("mcp-session-id", conn.private[:excom_session].id)
+        |> send_resp(200, Jason.encode!(messages))
+    end
   end
 
   delete _ do
