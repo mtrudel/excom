@@ -3,7 +3,7 @@ defmodule EXCOM.Plug do
   A plug that exposes EXCOM's configured MCP primitives via HTTP streaming.
   """
 
-  use Plug.Router
+  use Plug.Router, copy_opts_to_assign: :excom_config
 
   plug(Plug.Parsers,
     parsers: [:json],
@@ -34,10 +34,11 @@ defmodule EXCOM.Plug do
   end
 
   post _ do
+    config = conn.assigns[:excom_config]
     {messages, session} =
       conn.body_params["_json"]
       |> Enum.reduce({[], conn.private[:excom_session]}, fn message, {messages, session} ->
-        {new_messages, session} = EXCOM.Server.handle_message(message, session)
+        {new_messages, session} = EXCOM.Server.handle_message(message, session, config)
         {[new_messages | messages], session}
       end)
 

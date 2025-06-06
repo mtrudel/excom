@@ -6,7 +6,7 @@ defmodule EXCOM.PlugTest do
   import MCPClient
 
   setup do
-    server_pid = start_supervised!({Bandit, plug: EXCOM.Plug, port: 0})
+    server_pid = start_supervised!({Bandit, plug: {EXCOM.Plug, EXCOM.Config.new()}, port: 0})
     {:ok, {_ip, port}} = ThousandIsland.listener_info(server_pid)
     [url: "http://localhost:#{port}", port: port, server_pid: server_pid]
   end

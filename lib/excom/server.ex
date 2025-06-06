@@ -8,7 +8,8 @@ defmodule EXCOM.Server do
 
   def handle_message(
         %Request{method: "initialize", params: %{"protocolVersion" => "2025-03-26"}} = message,
-        %EXCOM.Session{state: :initializing} = session
+        %EXCOM.Session{state: :initializing} = session,
+        _config
       ) do
     result = %{
       protocolVersion: "2025-03-26",
@@ -26,17 +27,18 @@ defmodule EXCOM.Server do
 
   def handle_message(
         %Notification{method: "notifications/initialized"},
-        %EXCOM.Session{state: :initializing} = session
+        %EXCOM.Session{state: :initializing} = session,
+        _config
       ) do
     {[], %{session | state: :initialized}}
   end
 
   # Ping
 
-  def handle_message(%Request{method: "ping"} = message, %EXCOM.Session{} = session) do
+  def handle_message(%Request{method: "ping"} = message, %EXCOM.Session{} = session, _config) do
     {%Response{id: message.id}, session}
   end
 
-  def handle_message(%Response{}, %EXCOM.Session{} = session), do: {[], session}
-  def handle_message(%Notification{}, %EXCOM.Session{} = session), do: {[], session}
+  def handle_message(%Response{}, %EXCOM.Session{} = session, _config), do: {[], session}
+  def handle_message(%Notification{}, %EXCOM.Session{} = session, _config), do: {[], session}
 end
