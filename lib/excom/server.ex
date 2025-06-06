@@ -50,6 +50,23 @@ defmodule EXCOM.Server do
     {%Response{id: message.id, result: result}, session}
   end
 
+  # Tool execution
+
+  def handle_message(
+        %Request{method: "tools/call", params: %{"name" => tool_name, "arguments" => args}} = message,
+        %EXCOM.Session{state: :initialized} = session,
+        %EXCOM.Config{} = config
+      ) do
+    case Enum.find(config.tools, &(&1.name() == tool_name)) do
+      tool when not is_nil tool ->
+        case tool.run(args, session) do
+          {:ok, result, session} -> {%Response{id: message.id, result: result}, session}
+          # TBD error
+        end
+      # TBD no tool founds
+    end
+  end
+
   def handle_message(%Response{}, %EXCOM.Session{} = session, _config), do: {[], session}
   def handle_message(%Notification{}, %EXCOM.Session{} = session, _config), do: {[], session}
 end

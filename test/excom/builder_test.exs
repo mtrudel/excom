@@ -15,7 +15,7 @@ defmodule EXCOM.BuilderTest do
     def description, do: "A tool for testing purposes"
 
     @impl true
-    def params, do: %{}
+    def params, do: %{type: "object"}
 
     @impl true
     def run(params, session) do
@@ -28,7 +28,6 @@ defmodule EXCOM.BuilderTest do
 
     tool MyTool
   end
-
 
   setup do
     server_pid = start_supervised!({Bandit, plug: MyBuilder, port: 0})
@@ -43,7 +42,18 @@ defmodule EXCOM.BuilderTest do
       list_request = build_request(123, "tools/list", %{})
       resp = Req.post!(context.url, json: list_request, headers: %{"Mcp-Session-Id": session_id})
       assert resp.status == 200
-      assert resp.body ~> valid_response(123, %{"tools" => [%{"name" => "my_tool", "description" => "A tool for testing purposes", "inputSchema" => %{}}]})
+      assert resp.body ~> valid_response(123, %{"tools" => [%{"name" => "my_tool", "description" => "A tool for testing purposes", "inputSchema" => %{"type" => "object"}}]})
+    end
+  end
+
+  describe "tool execution" do
+    test "tools can be executed", context do
+      session_id = negotiate_session(context.url)
+
+      call_request = build_request(123, "tools/call", %{name: "my_tool", arguments: %{}})
+      resp = Req.post!(context.url, json: call_request, headers: %{"Mcp-Session-Id": session_id})
+      assert resp.status == 200
+      assert resp.body ~> valid_response(123, %{"result" => "%{}"})
     end
   end
 end
