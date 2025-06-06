@@ -46,24 +46,32 @@ defmodule EXCOM.Server do
         %EXCOM.Session{state: :initialized} = session,
         %EXCOM.Config{} = config
       ) do
-    result = %{tools: config.tools |> Enum.map(&%{name: &1.name(), description: &1.description(), inputSchema: &1.params()})}
+    result = %{
+      tools:
+        config.tools
+        |> Enum.map(&%{name: &1.name(), description: &1.description(), inputSchema: &1.params()})
+    }
+
     {%Response{id: message.id, result: result}, session}
   end
 
   # Tool execution
 
   def handle_message(
-        %Request{method: "tools/call", params: %{"name" => tool_name, "arguments" => args}} = message,
+        %Request{method: "tools/call", params: %{"name" => tool_name, "arguments" => args}} =
+          message,
         %EXCOM.Session{state: :initialized} = session,
         %EXCOM.Config{} = config
       ) do
     case Enum.find(config.tools, &(&1.name() == tool_name)) do
-      tool when not is_nil tool ->
+      tool when not is_nil(tool) ->
         case tool.run(args, session) do
-          {:ok, result, session} -> {%Response{id: message.id, result: result}, session}
-          # TBD error
+          {:ok, result, session} ->
+            {%Response{id: message.id, result: result}, session}
+            # TBD error
         end
-      # TBD no tool founds
+
+        # TBD no tool founds
     end
   end
 

@@ -20,7 +20,7 @@ defmodule EXCOM.Builder do
     excom_config = Module.get_attribute(env.module, :excom_config)
 
     quote do
-      plug EXCOM.Plug, unquote(Macro.escape(excom_config, unquote: true))
+      plug(EXCOM.Plug, unquote(Macro.escape(excom_config, unquote: true)))
     end
   end
 

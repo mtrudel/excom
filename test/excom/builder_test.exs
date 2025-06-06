@@ -26,7 +26,7 @@ defmodule EXCOM.BuilderTest do
   defmodule MyBuilder do
     use EXCOM.Builder
 
-    tool MyTool
+    tool(MyTool)
   end
 
   setup do
@@ -42,7 +42,17 @@ defmodule EXCOM.BuilderTest do
       list_request = build_request(123, "tools/list", %{})
       resp = Req.post!(context.url, json: list_request, headers: %{"Mcp-Session-Id": session_id})
       assert resp.status == 200
-      assert resp.body ~> valid_response(123, %{"tools" => [%{"name" => "my_tool", "description" => "A tool for testing purposes", "inputSchema" => %{"type" => "object"}}]})
+
+      assert resp.body
+             ~> valid_response(123, %{
+               "tools" => [
+                 %{
+                   "name" => "my_tool",
+                   "description" => "A tool for testing purposes",
+                   "inputSchema" => %{"type" => "object"}
+                 }
+               ]
+             })
     end
   end
 

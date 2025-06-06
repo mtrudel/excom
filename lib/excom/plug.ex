@@ -35,6 +35,7 @@ defmodule EXCOM.Plug do
 
   post _ do
     config = conn.assigns[:excom_config]
+
     {messages, session} =
       conn.body_params["_json"]
       |> Enum.reduce({[], conn.private[:excom_session]}, fn message, {messages, session} ->

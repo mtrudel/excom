@@ -6,5 +6,6 @@ defmodule EXCOM.Tool do
   @callback name() :: String.t()
   @callback description() :: String.t()
   @callback params() :: map()
-  @callback run(map(), EXCOM.Session.t()) :: {:ok, map(), EXCOM.Session.t()} | {:error, String.t()}
+  @callback run(map(), EXCOM.Session.t()) ::
+              {:ok, map(), EXCOM.Session.t()} | {:error, String.t()}
 end

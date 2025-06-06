@@ -9,7 +9,13 @@ defmodule MCPClient do
     resp = Req.post!(url, json: build_initialize())
     [session_id] = resp.headers["mcp-session-id"]
     assert resp.status == 200
-    resp = Req.post!(url, json: build_initialized_notification(), headers: %{"Mcp-Session-Id": session_id})
+
+    resp =
+      Req.post!(url,
+        json: build_initialized_notification(),
+        headers: %{"Mcp-Session-Id": session_id}
+      )
+
     assert resp.status == 202
     session_id
   end
