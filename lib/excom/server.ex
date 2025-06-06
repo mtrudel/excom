@@ -39,6 +39,17 @@ defmodule EXCOM.Server do
     {%Response{id: message.id}, session}
   end
 
+  # Tool listing
+
+  def handle_message(
+        %Request{method: "tools/list"} = message,
+        %EXCOM.Session{state: :initialized} = session,
+        %EXCOM.Config{} = config
+      ) do
+    result = %{tools: config.tools |> Enum.map(&%{name: &1.name(), description: &1.description(), inputSchema: &1.params()})}
+    {%Response{id: message.id, result: result}, session}
+  end
+
   def handle_message(%Response{}, %EXCOM.Session{} = session, _config), do: {[], session}
   def handle_message(%Notification{}, %EXCOM.Session{} = session, _config), do: {[], session}
 end
