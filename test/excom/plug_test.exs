@@ -3,6 +3,8 @@ defmodule EXCOM.PlugTest do
 
   use Machete
 
+  import MCPClient
+
   setup do
     server_pid = start_supervised!({Bandit, plug: EXCOM.Plug, port: 0})
     {:ok, {_ip, port}} = ThousandIsland.listener_info(server_pid)
@@ -52,50 +54,12 @@ defmodule EXCOM.PlugTest do
 
   describe "ping support" do
     test "echoes back pings", context do
-      resp = Req.post!(context.url, json: build_initialize())
-      [session_id] = resp.headers["mcp-session-id"]
+      session_id = negotiate_session(context.url)
 
       ping_request = build_request(123, "ping", %{})
       resp = Req.post!(context.url, json: ping_request, headers: %{"Mcp-Session-Id": session_id})
       assert resp.status == 200
       assert resp.body ~> valid_response(123, %{})
     end
-  end
-
-  defp build_initialize do
-    build_request(
-      1,
-      "initialize",
-      %{
-        protocolVersion: "2025-03-26",
-        capabilities: %{roots: %{listChanged: true}, sampling: %{}},
-        clientInfo: %{name: "ExampleClient", version: "1.0.0"}
-      }
-    )
-  end
-
-  defp build_request(id, method, params) do
-    %{jsonrpc: "2.0", id: id, method: method}
-    |> Map.merge(if map_size(params) > 0, do: %{params: params}, else: %{})
-  end
-
-  defp valid_initialize_response do
-    valid_response(
-      1,
-      %{
-        "protocolVersion" => "2025-03-26",
-        "capabilities" => %{
-          "tools" => %{}
-        },
-        "serverInfo" => %{
-          "name" => "EXCOM",
-          "version" => to_string(Application.spec(:excom)[:vsn])
-        }
-      }
-    )
-  end
-
-  defp valid_response(id, result) do
-    %{"jsonrpc" => "2.0", "id" => id, "result" => result}
   end
 end
